@@ -11,7 +11,7 @@ In short:
 - contexts can be nested
 - you can work with multiple contexts in parallel
 - in vim, one context is represented by exactly one tab
-- "context thinking" can help with resolving complex merge conflicts
+- "context thinking" can help resolve complex merge conflicts
 
 A lot of productivity features are planned. See issues for a list.
 
@@ -23,9 +23,11 @@ tabs, they are told by seasoned users that they're doing it wrong.
 
 The correct way to use tabs is to use one tab per logical context.
 
-What is a logical context?
+But what is a logical context?
 
-Let me give you an example. I have a devopsy project which contains code which
+Let me give you an example.
+
+I have a devopsy project which contains code which
 is supposed to be run inside a docker container, and some other files meant to
 be run outside of it. These two are different contexts, yet they
 belong together, in the same project. Let's call the files with code meant to
@@ -38,8 +40,8 @@ make compensating changes in context I in order to not create bugs.
 
 For this scenario, the correct way is to create one tab for context I and
 another tab for context O. Usually, I will also change the directory of the
-current tab with the command tcd to the common denominator. From this point on,
-when I use plugins like CtrlP, I will get a list of only files in the current
+current tab with the command `tcd` to the common denominator. From this point on,
+when I use plugins like `CtrlP`, I will get a list of only files in the current
 context.
 
 Similarly for context I.
@@ -48,10 +50,11 @@ When I need to edit files from one context, I use buffers - I load new or
 existing buffers "into" the current context - or tab.
 
 The problem: When I want to switch between buffers, I have to go through all
-buffers, including buffers from other contexts.
+buffers, including buffers from other contexts. This is because the `ls` command
+shows all buffers, without caring about the tab.
 
-And this is the problem which vim-tabs is trying to solve. It provides you with
-commands which you can bind to maps like CTRL-O, or just create different
+And this is the problem which `vim-tabs` is trying to solve. It provides you with
+commands which you can bind to shortcuts like `CTRL-O`, or just create different
 mappings to your liking, so that you can jump between buffers previously "seen"
 by the current tab.
 
@@ -80,10 +83,10 @@ To elaborate:
 - the working directory is thus relevant, because it can constrain what we load
     into the current tab; we should strive to at least load buffers of files
     from the current directory or deeper in the tree structure; the tab-local
-    CWD can be set with the tcd command
+    CWD can be set with the `tcd` command
 - the files themselves: as mentioned, keep in a tab only files under the same
-    directory (recursively); CtrlP helps here: once you set the tcd and open
-    CtrlP, you will get only files starting the the CWD
+    directory (recursively); `CtrlP` helps here: once you set the `tcd` and open
+    `CtrlP`, you will get only files starting the the `CWD`
 - buffers are obviously shared among windows, and thus among tabs; however,
     again, strive to edit the files only via the tab of the context in which
     they belong
@@ -98,10 +101,10 @@ of them, switching between tabs.
 
 Let's say that at some point we need to implement a feature which involves
 correlated changes in both contexts. This sounds like a problem, based on the
-rules outlined, but! But this new feature is itself a new context, thus
+rules outlined, *but*! But this new feature is itself a new context, thus
 deserves a new tab!
 
-So create one, set its tcd to the deepest directory common to both files, and
+So create one, set its `tcd` to the deepest directory common to both files, and
 edit them in parallel, in that third tab! When done with the feature, close the
 tab.
 
@@ -111,9 +114,9 @@ While resolving a merge conflict, you might want to switch between contexts,
 because 3-way diff can get very complicated very fast:
 
 - context "diff local to base" - this context reminds you of the changes done
-    in the current branch (LOCAL), relative to where you started
+    in the current branch (`LOCAL`), relative to where you started
 - context "diff remote to base" - this context shows the changes done by the
-    other branch (REMOTE)
+    other branch (`REMOTE`)
 - context "diff local to remote" - here you can resolve the conflicts more
     easily, after understanding the changes from the previous two contexts
 - context "working copy" - here you can navigate the current code
@@ -129,36 +132,38 @@ I'm trying to keep the "public API" as stable as possible.
 
 That being said, the commands are currently:
 
-- TabHistoryGotoNext
-- TabHistoryGotoPrev
-- TabHistoryClear
-- TabHistoryList
+- `TabHistoryGotoNext`
+- `TabHistoryGotoPrev`
+- `TabHistoryClear`
+- `TabHistoryList`
 
 With much more being planned!
 
 My mappings are for instance
 
+```
 nnoremap <silent> <Leader>tn :TabHistoryGotoNext<CR>
 nnoremap <silent> <Leader>tp :TabHistoryGotoPrev<CR>
 nnoremap <silent> <Leader>tc :TabHistoryClear<CR>
 nnoremap <silent> <Leader>tl :TabHistoryList<CR>
+```
 
 # Relevant vim settings, commands and other plugins, and requirements
 
-- autochdir - should not be used, because it constraints the CWD too much, and
+- `autochdir` - should not be used, because it constraints the `CWD` too much, and
     thus the files which you can load with ease
-- set hidden - must be set, so that you can hide buffers, while loading
+- `set hidden` - must be set, so that you can hide buffers, while loading
     different ones in the current window
-- vim-rooter - must have its chdir feature disabled
-- tcd - is vital, use it. If you start a tab with a file at the root of the new
-    context, you can change the directory with tcd %:p:h
-- use marks and other motions! See :help motions.txt
+- `vim-rooter` - must have its chdir feature disabled
+- `tcd` - is vital, use it. If you start a tab with a file at the root of the new
+    context, you can change the directory with `tcd %:p:h`
+- use marks and other motions! See `:help motions.txt`
 
 This plugin is best used with other productivity plugins:
 
-- CtrlP - find files only in the current context
-- taboo.vim - give the tab a meaningful name
-- startify - easily resume your work on your contexts by using sessions
-- floaterm - start a shell in the current context
-- NERDTree - browse files in the current context, when you don't know what to
-    search for with CtrlP
+- `CtrlP` - find files only in the current context
+- `taboo.vim` - give the tab a meaningful name
+- `startify` - easily resume your work on your contexts by using sessions
+- `floaterm` - start a shell in the current context
+- `NERDTree` - browse files in the current context, when you don't know what to
+    search for with `CtrlP`
