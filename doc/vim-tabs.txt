@@ -159,7 +159,7 @@ representation of a file. When you load a file in vim, it gets a buffer.
 When you look at a file, you see just a part of it (if the file is very big or
 the window is too small). The mechanism you use to see this slice of a buffer
 is called a window. As an analogy, in web browser, people call this "the
-canvas" - just a slice of the whole thing, or a "view into".
+viewport" - just a slice of the whole thing, or a "view into".
 
 So you might have different windows looking at different slices of the same
 buffer.
