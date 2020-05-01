@@ -2,7 +2,7 @@
 " Public API
 " =============================================================================
 " Go to the next-higher buffer number
-function! tabhistory#GoToNext()
+function! tabs#GoToNext()
     let visited_bufs = s:GetSortedBuffersOfTab(tabpagenr())
     let current_buf = str2nr(bufnr())
     let current_pos = index(visited_bufs, current_buf)
@@ -19,7 +19,7 @@ function! tabhistory#GoToNext()
 endfunction
 
 " Go to the previous buffer by number
-function! tabhistory#GoToPrev()
+function! tabs#GoToPrev()
     let visited_bufs = s:GetSortedBuffersOfTab(tabpagenr())
     let current_buf = str2nr(bufnr())
     let current_pos = index(visited_bufs, string(current_buf))
@@ -34,7 +34,7 @@ function! tabhistory#GoToPrev()
     execute "buffer" visited_bufs[new_buffer_pos]
 endfunction
 
-function! tabhistory#List()
+function! tabs#List()
     let tabnr = tabpagenr()
     let visited_bufs = gettabvar(tabnr, 'visited_bufs', {})
     let cwd = getcwd(-1, tabnr)
@@ -58,7 +58,7 @@ function! tabhistory#List()
     endfor
 endfunction
 
-function! tabhistory#ClearHistory()
+function! tabs#ClearHistory()
     let tabnr = tabpagenr()
     let visited_bufs = s:GetSortedBuffersOfTab(tabnr)
     for bufnr in visited_bufs
@@ -104,21 +104,23 @@ endfunction!
 " =============================================================================
 " Event handlers
 " =============================================================================
-function! tabhistory#OnBufVisible(bufnr)
+function! tabs#OnBufVisible(bufnr)
     if !s:BufferIsListed(a:bufnr + 0)
         return
     endif
-    if !has_key(t:visited_bufs, a:bufnr+0)
-        let t:visited_bufs[a:bufnr+0] = 0
-    endif
-    let t:visited_bufs[a:bufnr+0] = t:visited_bufs[a:bufnr+0] + 1
-    let info = getbufinfo(a:bufnr+0)[0]
-    unlet info['variables']
     let tabnr = tabpagenr()
-    let name = fnamemodify(info['name'], ':t')
+    let visited_bufs = gettabvar(tabnr, 'visited_bufs', {})
+    if !has_key(visited_bufs, a:bufnr+0)
+        let visited_bufs[a:bufnr+0] = 0
+    endif
+    let visited_bufs[a:bufnr+0] = visited_bufs[a:bufnr+0] + 1
+    call settabvar(tabnr, 'visited_bufs', visited_bufs)
+    " let info = getbufinfo(a:bufnr+0)[0]
+    " unlet info['variables']
+    " let name = fnamemodify(info['name'], ':t')
 endfunction
 
-function! tabhistory#OnBufDeleted(bufnr)
+function! tabs#OnBufDeleted(bufnr)
     if !s:BufferIsListed(a:bufnr+0)
         return
     endif
@@ -127,7 +129,7 @@ function! tabhistory#OnBufDeleted(bufnr)
     " echom "buffer deleted " . a:bufnr . ' tab: ' . tabnr . ' visited: ' . string(t:visited_bufs)
 endfunction
 
-function! tabhistory#FilterFileTypes(bufnr)
+function! tabs#FilterFileTypes(bufnr)
     let ft = getbufvar(a:bufnr, '&filetype')
     if (index([], ft) >= 0)
         call s:DeleteFromAllTabHistory(a:bufnr)
@@ -137,7 +139,3 @@ function! tabhistory#FilterFileTypes(bufnr)
     endif
 endfunction
 
-autocmd BufEnter * call tabhistory#OnBufVisible(expand('<abuf>') + 0)
-autocmd BufDelete * call tabhistory#OnBufDeleted(expand('<abuf>') + 0)
-autocmd BufWipeout * call tabhistory#OnBufDeleted(expand('<abuf>') + 0)
-autocmd FileType * call tabhistory#FilterFileTypes(expand('<abuf>') + 0)
