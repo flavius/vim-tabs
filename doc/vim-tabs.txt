@@ -61,7 +61,7 @@ you have to make compensating changes in another subtree, in order to not
 introduce bugs.
 
 And here is where tabs come into play. Or rather, contexts. Let's talk about
-contexts first.
+contexts first, and in the next section we'll focus on the practical aspect.
 
 Each of the subtrees can normally be edited in isolation, if you're changing
 implementation details of the respective subsystem. For each of them, you
@@ -115,11 +115,12 @@ directory {B}.
 You might then argue that the first logical view is a subset of the second
 view - and you might be right, but maybe also not! It depends on the criteria
 you use to group files. Maybe from the architectural standpoint it makes sense
-to group them differently.
+to group them differently - for the task at hand.
 
-A logical view is a (semantic) lens at your project and what lenses you define
-depends heavily on the project. Fact is, in reasonably sized projects, you
-will need this lensing because of the rigidity of the filesystem.
+A logical view is a (semantic) lens through which you look at your project and
+what lenses you define depends heavily on the project. Fact is, in reasonably
+sized projects, you will need this lensing because of the rigidity of the
+filesystem.
 
 If a feature request comes in, and the changes you need to make have ripple
 effects throughout the architecture, it might make sense to have three logical
@@ -137,6 +138,12 @@ with less cognitive load.
 Note: the file {cd.txt} is loaded in two logical views simultaneously.
 Note: CWD stands for current working directory (of the view/tab).
 
+Please notice the MIGHT in the above example. It might be a good approach! But
+it can also be that you realize that in fact you're moving a lot between the
+files {a.txt}, {ab.txt} and {main.txt}. In this case, maybe it's best to
+define a new logical view with these files, so that you move between them
+quickly.
+
 
 ------------------------------------------------------------------------------
 VIM PARLANCE
@@ -151,8 +158,8 @@ representation of a file. When you load a file in vim, it gets a buffer.
 
 When you look at a file, you see just a part of it (if the file is very big or
 the window is too small). The mechanism you use to see this slice of a buffer
-is called a window. In web browser, people call this "the canvas" - just
-a slice of the whole thing.
+is called a window. As an analogy, in web browser, people call this "the
+canvas" - just a slice of the whole thing, or a "view into".
 
 So you might have different windows looking at different slices of the same
 buffer.
