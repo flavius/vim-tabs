@@ -1,0 +1,228 @@
+*vim-tabs.txt*   Use tabs correctly and productively.
+
+Author:   Flavius Aspra <https://github.com/flavius>
+License:  GPL
+
+
+==============================================================================
+#                            _____       _                                   #
+#                           |_   _|     | |                                  #
+#                             | |  __ _ | |__   ___                          #
+#                             | | / _` || '_ \ / __|                         #
+#                             | || (_| || |_) |\__ \                         #
+#                             \_/ \__,_||_.__/ |___/                         #
+#                                                                            #
+==============================================================================
+
+CONTENTS                                                     *vim-tabs-contents*
+
+  1. Terminology and Workflow ................................. |vim-tabs-intro|
+  2. Required Settings ................................. |vim-tabs-requirements|
+  3. Usage .................................................... |vim-tabs-usage|
+  4. Commands .............................................. |vim-tabs-commands|
+  5. Mappings .............................................. |vim-tabs-mappings|
+  6. Example Config .......................................... |vim-tabs-config|
+  7. Recommendations ................................ |vim-tabs-recommendations|
+
+
+==============================================================================
+TERMINOLOGY AND WORKFLOW                                        *vim-tabs-intro*
+------------------------------------------------------------------------------
+
+Before talking about (vim) tabs and how they fit into the picture, we should
+be talking about the notion of "context". Another term for "context" could be
+"logical view".
+
+In a project with many files, you try to group files together in directories
+of related files, by a certain criteria, which makes sense for the project at
+hand.
+
+Unfortunately, a flat hierarchy of directories with a single level of depth is
+usually not enough, so you will naturally nest the directories in other
+directories, creating a tree of directories and files, arbitrarily deep.
+
+While the criteria you used initially to group your files was good, in
+a functioning project of reasonable complexity, you will also have
+dependencies between files in different subtrees of the project.
+
+This is not a problem with your strategy for grouping files, it's rather
+a problem with filesystems, which force you to have a rigid tree of
+directories. Add to that the fact that at some point, different parts of the
+project, different subsystems, different classes, etc, have to be wired
+together - they have to communicate, even if higher up in the abstraction tree
+of the architecture.
+
+Components from different subtrees need to be integrated.
+
+This is normal and can be tackled with architectural artifacts.
+
+The problem is the following: when you make a change in one of the subtrees,
+you have to make compensating changes in another subtree, in order to not
+introduce bugs.
+
+And here is where tabs come into play. Or rather, contexts. Let's talk about
+contexts first.
+
+Each of the subtrees can normally be edited in isolation, if you're changing
+implementation details of the respective subsystem. For each of them, you
+would have their own "logical view". In vim, this "logical view" is
+materialized as "a tab page".
+
+If you then need to implement a feature which involves integrating them, you
+create a third "logical view".
+
+In this third logical view, you will probably not open so many files, but it
+will be those which, when modified, trigger corresponding changes in the files
+from another subsystem. But you will be making this changes all over the
+place, poking at the code.
+
+Let's have a look at a hypothetical directory structure >
+
+ ── project-root
+    ├── main.txt
+    ├── A
+    │   └── B
+    │       ├── cd.txt
+    │       ├── C
+    │       │   ├── b.txt
+    │       │   └── a.txt
+    │       └── D
+    │           └── c.txt
+    └── X
+        └── Y
+            ├── ab.txt
+            └── Z
+                ├── b.txt
+                └── a.txt
+
+
+
+<
+In one logical view you might be editing just the files {a.txt} and {b.txt}.
+
+Note: The directory {C} has just two files for brevity, but it could have more
+files and directories inside.
+
+The working directory of this logical view might sense to be the directory
+{C}.
+
+
+In another logical view you could be editing just file {c.txt}, but
+semantically, let's suppose it would make sense to also edit {cd.txt} in this
+view. For this reason, the working directory of this view would be the entire
+directory {B}.
+
+You might then argue that the first logical view is a subset of the second
+view - and you might be right, but maybe also not! It depends on the criteria
+you use to group files. Maybe from the architectural standpoint it makes sense
+to group them differently.
+
+A logical view is a (semantic) lens at your project and what lenses you define
+depends heavily on the project. Fact is, in reasonably sized projects, you
+will need this lensing because of the rigidity of the filesystem.
+
+If a feature request comes in, and the changes you need to make have ripple
+effects throughout the architecture, it might make sense to have three logical
+views:
+
+  1. {a.txt}, {b.txt} CWD: {C} - for implementation details of subsystem {C}
+  2. {c.txt}, {cd.txt}, CWD: {B} - for implementation details of subsystem {B}
+  3. {main.txt}, {cd.txt}, {ab.txt}, CWD: {project-root} - for the topmost
+     integration level
+
+You might have to switch constantly between the three logical views, and
+having each of them available in its own tab can help you move around faster
+with less cognitive load.
+
+Note: the file {cd.txt} is loaded in two logical views simultaneously.
+Note: CWD stands for current working directory (of the view/tab).
+
+
+------------------------------------------------------------------------------
+VIM PARLANCE
+------------------------------------------------------------------------------
+
+As you might have guessed, a logical view is a tab in vim. This is the purpose
+of a tab, and this is why seasoned vim users will tell beginners that they use
+tabs wrongly.
+
+The building block of vim is "the buffer". This is the in-memory
+representation of a file. When you load a file in vim, it gets a buffer.
+
+When you look at a file, you see just a part of it (if the file is very big or
+the window is too small). The mechanism you use to see this slice of a buffer
+is called a window. In web browser, people call this "the canvas" - just
+a slice of the whole thing.
+
+So you might have different windows looking at different slices of the same
+buffer.
+
+On top of this come the tabs. They are collections of windows.
+
+The issue with tabs is that they don't keep track of which buffers you're
+viewing or editing in them, and you must manage this more manually, adding
+friction to the workflow.
+
+Vim itself has commands like :ls to list the buffers, :bnext & co to move
+across buffers, but they involve all buffers, irrespective of the tab!
+
+Which means that if you use them, you end up cobbling up your logical view
+with buffers from completely different logical views.
+
+Vim tabs provides the necessary commands to navigate and manage your logical
+views with care.
+
+
+
+------------------------------------------------------------------------------
+EXAMPLE WORKFLOWS
+------------------------------------------------------------------------------
+
+Text
+
+------------------------------------------------------------------------------
+WORKFLOW ALTERNATIVES
+------------------------------------------------------------------------------
+
+Text
+
+==============================================================================
+REQUIRED SETTINGS                                        *vim-tabs-requirements*
+------------------------------------------------------------------------------
+
+Text
+
+==============================================================================
+USAGE                                                           *vim-tabs-usage*
+------------------------------------------------------------------------------
+
+Text
+
+==============================================================================
+COMMANDS                                                     *vim-tabs-commands*
+------------------------------------------------------------------------------
+
+Text
+
+:TabHistoryGotoNext                                        *:TabHistoryGotoNext*
+
+==============================================================================
+MAPPINGS                                                     *vim-tabs-mappings*
+------------------------------------------------------------------------------
+
+Text
+
+==============================================================================
+EXAMPLE CONFIGS                                                *vim-tabs-config*
+------------------------------------------------------------------------------
+
+Text
+
+==============================================================================
+RECOMMENDATIONS                                       *vim-tabs-recommendations*
+------------------------------------------------------------------------------
+
+Text
+
+
+vim:tw=78:ts=8:ft=help:norl:
