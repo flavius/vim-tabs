@@ -1,5 +1,9 @@
-# vim-tabs
-Vim plugin which helps you to use tabs correctly and productively.
+# Why it matters?
+Productivity in vim matters.
+
+# What it does
+
+It helps you use tabs correctly and productively.
 
 This plugin is a work in progress, but it introduces the notion of "context",
 which, when paired with vim tabs, can be very powerful.
@@ -25,40 +29,94 @@ The correct way to use tabs is to use one tab per logical context.
 
 But what is a logical context?
 
-Let me give you an example.
+Let's have a look at a hypothetical directory structure 
 
-I have a devopsy project which contains code which
-is supposed to be run inside a docker container, and some other files meant to
-be run outside of it. These two are different contexts, yet they
-belong together, in the same project. Let's call the files with code meant to
-be run inside "context I", and the code meant to be run outside of the
-container "context O".
+```
 
-Usually, the changes that I make in context O or in context I do not affect the
-other context, meaning: if I make changes to context O's files, I don't need to
-make compensating changes in context I in order to not create bugs.
+ ── project-root
+    ├── main.txt
+    ├── A
+    │   └── B
+    │       ├── cd.txt
+    │       ├── C
+    │       │   ├── b.txt
+    │       │   └── a.txt
+    │       └── D
+    │           └── c.txt
+    └── X
+        └── Y
+            ├── ab.txt
+            └── Z
+                ├── b.txt
+                └── a.txt
 
-For this scenario, the correct way is to create one tab for context I and
-another tab for context O. Usually, I will also change the directory of the
-current tab with the command `tcd` to the common denominator. From this point on,
-when I use plugins like `CtrlP`, I will get a list of only files in the current
-context.
+```
 
-Similarly for context I.
 
-When I need to edit files from one context, I use buffers - I load new or
-existing buffers "into" the current context - or tab.
+In one logical view you might be editing just the files `a.txt` and `b.txt`.
 
-The problem: When I want to switch between buffers, I have to go through all
-buffers, including buffers from other contexts. This is because the `ls` command
-shows all buffers, without caring about the tab.
+Note: The directory `C` has just two files for brevity, but it could have more
+files and directories inside.
 
-And this is the problem which `vim-tabs` is trying to solve. It provides you with
-commands which you can bind to shortcuts like `CTRL-O`, or just create different
-mappings to your liking, so that you can jump between buffers previously "seen"
-by the current tab.
+The working directory of this logical view might sense to be the directory
+`C`.
+
+
+In another logical view you could be editing just file `c.txt`, but
+semantically, let's suppose it would make sense to also edit `cd.txt` in this
+view. For this reason, the working directory of this view would be the entire
+directory `B`.
+
+You might then argue that the first logical view is a subset of the second
+view - and you might be right, but maybe also not! It depends on the criteria
+you use to group files. Maybe from the architectural standpoint it makes sense
+to group them differently - for the task at hand.
+
+A logical view is a (semantic) lens through which you look at your project and
+what lenses you define depends heavily on the project. Fact is, in reasonably
+sized projects, you will need this lensing because of the rigidity of the
+filesystem.
+
+If a feature request comes in, and the changes you need to make have ripple
+effects throughout the architecture, it might make sense to have three logical
+views:
+
+  1. `a.txt`, `b.txt` CWD: `C` - for implementation details of subsystem `C`
+  2. `c.txt`, `cd.txt`, CWD: `B` - for implementation details of subsystem `B`
+  3. `main.txt`, `cd.txt`, `ab.txt`, CWD: `project-root` - for the topmost
+     integration level
+
+You might have to switch constantly between the three logical views, and
+having each of them available in its own tab can help you move around faster
+with less cognitive load.
+
+Note: the file `cd.txt` is loaded in two logical views simultaneously.
+Note: CWD stands for current working directory (of the view/tab).
+
+Please notice the MIGHT in the above example. It might be a good approach! But
+it can also be that you realize that in fact you're moving a lot between the
+files `a.txt`, `ab.txt` and `main.txt`. In this case, maybe it's best to
+define a new logical view with these files, so that you move between them
+quickly.
+
+# Installation
+
+## Vim's package manager
+
+Text
+
+## Pathogen
+
+Text
+
+## Vundle
+
+Text
+
 
 # Managing contexts
+
+TODO: move this section to docs
 
 A context consists of
 
