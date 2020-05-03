@@ -95,9 +95,6 @@ Let's have a look at a hypothetical directory structure >
                 ├── b.txt
                 └── a.txt
 
-
-
-<
 In one logical view you might be editing just the files {a.txt} and {b.txt}.
 
 Note: The directory {C} has just two files for brevity, but it could have more
@@ -107,7 +104,7 @@ The working directory of this logical view might sense to be the directory
 {C}.
 
 
-In another logical view you could be editing just file {c.txt}, but
+In another logical view you could be editing just the file {c.txt}, but
 semantically, let's suppose it would make sense to also edit {cd.txt} in this
 view. For this reason, the working directory of this view would be the entire
 directory {B}.
@@ -180,12 +177,54 @@ Vim tabs provides the necessary commands to navigate and manage your logical
 views with care.
 
 
+A logical view consists of
+
+- a purpose
+- a tab
+- the name of that tab
+- the working directory of the tab
+- all the files that can be loaded with vim, starting at the said directory
+- the buffers containing those files
+
+To elaborate:
+
+- the purpose is what you set yourself to do, the types of edits that you want
+    to make to the files; the context is not something strictly vim-related,
+    it's rather a framework; I'm talking about it explicitly to put you in
+    a specific mindset (the vim mindset, when we're talking about tabs)
+- the tab is the mechanics offered by vim as a representation of the purpose
+- the name of the tab: by default, this is the name of the current file being
+    viewed in the tab; but there are plugins like `vim-taboo` which allow you to
+    rename it
+- the working directory is thus relevant, because it can constrain what we load
+    into the current tab; we should strive to at least load buffers of files
+    from the current directory or deeper in the tree structure; the tab-local
+    `CWD` can be set with the `tcd` command
+- the files themselves: as mentioned, keep in a tab only files under the same
+    directory (recursively); `CtrlP` helps here: once you set the `tcd` and open
+    `CtrlP`, you will get only files starting inside the `CWD`
+- buffers are obviously shared among windows, and thus among tabs; however,
+    again, strive to edit the files only via the tab of the context in which
+    they belong
+
 
 ------------------------------------------------------------------------------
 EXAMPLE WORKFLOWS
 ------------------------------------------------------------------------------
 
-Text
+While resolving a merge conflict, you might want to switch between contexts,
+because 3-way diff can get very complicated very fast:
+
+- context "diff local to base" - this context reminds you of the changes done
+    in the current branch (`LOCAL`), relative to where you started
+- context "diff remote to base" - this context shows the changes done by the
+    other branch (`REMOTE`)
+- context "diff local to remote" - here you can resolve the conflicts more
+    easily, after understanding the changes from the previous two contexts
+- context "working copy" - here you can navigate the current code
+
+This is not yet a feature of this plugin, but it's planned and it's meant to
+outline again the power of "context thinking" when combined with vim tabs.
 
 ------------------------------------------------------------------------------
 WORKFLOW ALTERNATIVES

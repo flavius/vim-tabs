@@ -6,7 +6,7 @@ Productivity in vim matters.
 It helps you use tabs correctly and productively.
 
 This plugin is a work in progress, but it introduces the notion of "context",
-which, when paired with vim tabs, can be very powerful.
+or "logical view" which, when paired with vim tabs, can be very powerful.
 
 In short:
 
@@ -14,6 +14,7 @@ In short:
     your buffers
 - contexts can be nested
 - you can work with multiple contexts in parallel
+- you can work on the same file from different contexts
 - in vim, one context is represented by exactly one tab
 - "context thinking" can help resolve complex merge conflicts
 
@@ -112,75 +113,6 @@ Text
 ## Vundle
 
 Text
-
-
-# Managing contexts
-
-TODO: move this section to docs
-
-A context consists of
-
-- a purpose
-- a tab
-- the name of that tab
-- the working directory of the tab
-- all the files that can be loaded with vim, starting at the said directory
-- the buffers containing those files
-
-To elaborate:
-
-- the purpose is what you set yourself to do, the types of edits that you want
-    to make to the files; the context is not something strictly vim-related,
-    it's rather a framework; I'm talking about it explicitly to put you in
-    a specific mindset (the vim mindset, when we're talking about tabs)
-- the tab is the mechanics offered by vim as a representation of the purpose
-- the name of the tab: by default, this is the name of the current file being
-    viewed in the tab; but there are plugins like vim-taboo which allow you to
-    rename it; thinking back about our scenario from "Why this plugin?", the
-    name of the two tabs could have been "inside" and "outside"
-- the working directory is thus relevant, because it can constrain what we load
-    into the current tab; we should strive to at least load buffers of files
-    from the current directory or deeper in the tree structure; the tab-local
-    CWD can be set with the `tcd` command
-- the files themselves: as mentioned, keep in a tab only files under the same
-    directory (recursively); `CtrlP` helps here: once you set the `tcd` and open
-    `CtrlP`, you will get only files starting the the `CWD`
-- buffers are obviously shared among windows, and thus among tabs; however,
-    again, strive to edit the files only via the tab of the context in which
-    they belong
-
-This feels quite restrictive, but it actually empowers you. First of all,
-please note that you can create new contexts (new tabs) as needed, and close
-them when they're not needed any more!
-
-Let's recall our scenario from the previous section: we have two contexts,
-"context I" and "context O" and we work or navigate around in parallel in both
-of them, switching between tabs.
-
-Let's say that at some point we need to implement a feature which involves
-correlated changes in both contexts. This sounds like a problem, based on the
-rules outlined, *but*! But this new feature is itself a new context, thus
-deserves a new tab!
-
-So create one, set its `tcd` to the deepest directory common to both files, and
-edit them in parallel, in that third tab! When done with the feature, close the
-tab.
-
-# Other situation in which the "context thinking" makes sense
-
-While resolving a merge conflict, you might want to switch between contexts,
-because 3-way diff can get very complicated very fast:
-
-- context "diff local to base" - this context reminds you of the changes done
-    in the current branch (`LOCAL`), relative to where you started
-- context "diff remote to base" - this context shows the changes done by the
-    other branch (`REMOTE`)
-- context "diff local to remote" - here you can resolve the conflicts more
-    easily, after understanding the changes from the previous two contexts
-- context "working copy" - here you can navigate the current code
-
-This is not yet a feature of this plugin, but it's planned and it's meant to
-outline again the power of "context thinking" when combined with vim tabs.
 
 
 # Provided commands
