@@ -230,13 +230,20 @@ outline again the power of "context thinking" when combined with vim tabs.
 WORKFLOW ALTERNATIVES
 ------------------------------------------------------------------------------
 
-Text
+- use one vim session per context
+- use *argument-list*
 
 ==============================================================================
 REQUIRED SETTINGS                                        *vim-tabs-requirements*
 ------------------------------------------------------------------------------
 
-Text
+This plugin requires two settings >
+
+    set noautochdir
+    set hidden
+<
+Also, you should not use plugins which change this behavior or interfere with
+it.
 
 ==============================================================================
 USAGE                                                           *vim-tabs-usage*

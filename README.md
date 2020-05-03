@@ -102,18 +102,14 @@ quickly.
 
 # Installation
 
-## Vim's package manager
+Install using your favorite package manager, or use Vim's built-in package support:
 
-Text
-
-## Pathogen
-
-Text
-
-## Vundle
-
-Text
-
+```
+mkdir -p ~/.vim/pack/flavius/start
+cd ~/.vim/pack/flavius/start
+git clone https://github.com/flavius/vim-tabs.git
+vim -u NONE -c "helptags vim-tabs/doc" -c q
+```
 
 # Provided commands
 
