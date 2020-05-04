@@ -20,6 +20,12 @@ In short:
 
 A lot of productivity features are planned. See issues for a list.
 
+# Screenshot
+
+You don't see it, you use it:
+
+![screenshot](doc/screenshot.png)
+
 # Why this plugin?
 
 Whenever beginners or somewhat routined vimmers find out about tabs, they
