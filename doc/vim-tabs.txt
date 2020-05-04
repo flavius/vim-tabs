@@ -249,33 +249,56 @@ it.
 USAGE                                                           *vim-tabs-usage*
 ------------------------------------------------------------------------------
 
-Text
+Wip
 
 ==============================================================================
 COMMANDS                                                     *vim-tabs-commands*
 ------------------------------------------------------------------------------
 
-Text
-
 :TabHistoryGotoNext                                        *:TabHistoryGotoNext*
+    Go to the next buffer in the history of the current tab, by buffer number.
+
+:TabHistoryGotoPrev                                        *:TabHistoryGotoPrev*
+    Go to the previous buffer in the history of the current tab, by buffer
+    nunmber.
+
+:TabHistoryClear                                              *:TabHistoryClear*
+    Clear the history of seen buffers by current tab.
+
+:TabHistoryList                                        *:TabHistoryList*
+    List the buffers seen by the current tab, similarly to |:ls|, but
+    restricted to the current context.
 
 ==============================================================================
 MAPPINGS                                                     *vim-tabs-mappings*
 ------------------------------------------------------------------------------
 
-Text
+vim-tabs does not map any of the commands by default. If you want, you can map
+them to something that makes sense to you, or just use the commands directly.
+
+Example configuration: >
+    nnoremap <silent> <Leader>tn :TabHistoryGotoNext<CR>
+    nnoremap <silent> <Leader>tp :TabHistoryGotoPrev<CR>
+    nnoremap <silent> <Leader>tc :TabHistoryClear<CR>
+    nnoremap <silent> <Leader>tl :TabHistoryList<CR>
+<
 
 ==============================================================================
 EXAMPLE CONFIGS                                                *vim-tabs-config*
 ------------------------------------------------------------------------------
 
-Text
+vim-tabs does not offer any additional configuration currently. Everything is
+achieved via commands, which you can map to your liking.
 
 ==============================================================================
 RECOMMENDATIONS                                       *vim-tabs-recommendations*
 ------------------------------------------------------------------------------
 
-Text
+The following plugins are fitting into the workflow proposed by vim-tabs:
+
+- CtrlP - finds files starting from the current working directory
+- taboo.vim - good for renaming your tabs to better represent the context
+- floaterm - starts a shell in the current working directory
 
 
 vim:tw=78:ts=8:ft=help:norl:
