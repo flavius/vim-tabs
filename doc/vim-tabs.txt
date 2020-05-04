@@ -1,7 +1,7 @@
 *vim-tabs.txt*   Use tabs correctly and productively.
 
 Author:   Flavius Aspra <https://github.com/flavius>
-License:  GPL
+License:  GPL v3
 
 
 ==============================================================================
